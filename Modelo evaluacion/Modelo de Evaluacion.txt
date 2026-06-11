@@ -1,0 +1,101 @@
+CREATE DATABASE IF NOT EXISTS Tienda;
+USE Tienda;
+CREATE TABLE Productos (
+    ID_Productos INT AUTO_INCREMENT PRIMARY KEY,
+    NombreProducto VARCHAR(100) NOT NULL,
+    Descripcion VARCHAR(255),
+    Precio DECIMAL(10,2) NOT NULL,
+    StockDisponible INT NOT NULL
+);
+CREATE TABLE Clientes (
+    ID_Clientes INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(50) NOT NULL,
+    Apellido VARCHAR(50) NOT NULL,
+    CorreoElectronico VARCHAR(100) UNIQUE,
+    Direccion VARCHAR(150)
+);
+CREATE TABLE Pedidos(
+    ID_Pedidos INT AUTO_INCREMENT PRIMARY KEY,
+    ID_Productos INT,
+    ID_Clientes INT,
+    FechaPedido DATE,
+    EstadoPedido VARCHAR(30),
+    PrecioTotal DECIMAL(10,2),
+    TotalProductos INT,
+    FOREIGN KEY (ID_Productos)
+        REFERENCES Productos(ID_Productos),
+    FOREIGN KEY (ID_Clientes)
+        REFERENCES Clientes(ID_Clientes)
+);
+INSERT INTO Productos
+(NombreProducto, Descripcion, Precio, StockDisponible)
+VALUES
+('Laptop HP', 'Laptop 15 pulgadas', 850.00, 10),
+('Mouse Gamer', 'Mouse RGB', 35.00, 50),
+('Teclado Mecánico', 'Switch Blue', 75.00, 20),
+('Monitor Samsung', '24 pulgadas Full HD', 180.00, 15),
+('Pendrive 64GB', 'USB 3.0', 20.00, 100);
+INSERT INTO Clientes
+(Nombre, Apellido, CorreoElectronico, Direccion)
+VALUES
+('Juan', 'Perez', 'juan@gmail.com', 'Av. Siempre Viva 123'),
+('Maria', 'Gomez', 'maria@gmail.com', 'Calle Mitre 456'),
+('Carlos', 'Lopez', 'carlos@gmail.com', 'San Martin 789'),
+('Ana', 'Fernandez', 'ana@gmail.com', 'Belgrano 111'),
+('Lucia', 'Martinez', 'lucia@gmail.com', 'Rivadavia 222');
+INSERT INTO Pedidos
+(ID_Productos,ID_Clientes,FechaPedido,EstadoPedido,PrecioTotal,TotalProductos)
+VALUES
+(1,1,'2025-05-01','Entregado',850,1),
+(2,2,'2025-05-05','Pendiente',35,1),
+(3,3,'2025-05-10','Enviado',75,1),
+(4,1,'2025-05-15','En Proceso',180,1),
+(5,4,'2025-05-20','Entregado',20,1);
+
+SELECT P.NombreProducto, P.Precio
+FROM Productos P
+WHERE P.Precio > 50;
+
+
+SELECT DISTINCT C.Nombre, C.Apellido
+FROM Clientes C
+INNER JOIN Pedidos P
+ON C.ID_Clientes = P.ID_Clientes;
+
+
+SELECT C.Nombre, C.Apellido, P.FechaPedido
+FROM Clientes C
+INNER JOIN Pedidos P
+ON C.ID_Clientes = P.ID_Clientes
+WHERE P.EstadoPedido = 'Entregado';
+
+
+SELECT P.EstadoPedido, C.CorreoElectronico
+FROM Pedidos P
+INNER JOIN Clientes C
+ON P.ID_Clientes = C.ID_Clientes;
+
+
+SELECT C.Nombre, C.Apellido, P.FechaPedido
+FROM Clientes C
+INNER JOIN Pedidos P
+ON C.ID_Clientes = P.ID_Clientes
+WHERE P.FechaPedido = (
+    SELECT MAX(FechaPedido)
+    FROM Pedidos
+);
+
+
+SELECT C.Nombre, C.Apellido, P.FechaPedido, P.EstadoPedido
+FROM Clientes C
+INNER JOIN Pedidos P
+ON C.ID_Clientes = P.ID_Clientes
+WHERE P.EstadoPedido = 'Pendiente';
+
+
+SELECT NombreProducto, Precio
+FROM Productos
+WHERE Precio = (
+    SELECT MAX(Precio)
+    FROM Productos
+);

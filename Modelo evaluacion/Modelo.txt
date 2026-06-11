@@ -1,0 +1,76 @@
+Modelo de Evaluación Base de Datos: 
+
+Respuestas:
+
+1-¿Cuál es la función de la cláusula "WHERE" en una consulta
+SQL?
+
+b) Se utiliza para filtrar filas basadas en una condición especificada.
+
+2-¿Cuál de las siguientes sentencias SQL se utiliza para agregar una nueva fila a una
+tabla?
+
+c) `INSERT INTO`
+
+3-¿Qué comando SQL se utiliza para eliminar todos los registros de una tabla sin eliminar la tabla en sí?
+
+c) `REMOVE`
+
+4-Si tienes una tabla llamada "Productos" con una columna "Precio" y deseas
+encontrar el precio promedio de todos los productos, ¿cuál sería la consulta SQL
+correcta?
+
+c) `SELECT Precio FROM Productos WHERE AVG(Precio);`
+
+5-¿Cuál es el resultado de la siguiente consulta SQL?
+
+SELECT COUNT(*) FROM Empleados WHERE Departamento = 'Ventas';
+
+b) Muestra el número de empleados en el departamento de
+Ventas.
+
+6-¿Cuál es el propósito de la cláusula "GROUP BY" en una consulta
+SQL? 
+
+c) Agrupar filas en función de los valores de una o más columnas.
+
+7- ¿Qué hace la cláusula HAVING en SQL?
+
+b) Filtra grupos después de aplicar GROUP BY
+
+
+8- Estas 2 consultas devuelven lo mismo? JUSTIFICAR porque sí ó porque no.
+
+Consulta 1:
+SELECT Clientes.Nombre, Pedidos.Fecha
+FROM Clientes
+INNER JOIN Pedidos ON Clientes.ID = Pedidos.ID_cliente;
+
+Consulta 2:
+SELECT Clientes.Nombre, Pedidos.Fecha
+FROM Clientes, Pedidos
+WHERE Clientes.ID = Pedidos.ID_cliente;
+
+si porque el inner join y el where en este caso piden lo mismo que la id de clientes 
+en pedidos y en clientes sean iguales para mostrar los pedidos los cuales ya han sido ordenados.
+
+9-¿ Cuál es el propósito de la cláusula “INNER JOIN” en una consulta SQL, realice
+Un ejemplo de INNER JOIN.
+
+
+Sirve para consultar donde ambas tablas tienen los ID con información igual de ambos lados.
+
+SELECT C.Nombre, V.Producto
+FROM Clientes
+INNER JOIN Ventas
+ON C.IDClientes = V.IDClientes;
+
+
+10. Explica que es un diccionario de datos y ¿para qué sirve?.
+
+Es una lista ordenada de todos los datos que son de mi sistema que yo hice, 
+es una lista con todos los detalles de cada parte para que cualquier entidad de afuera o sea externa 
+interprete la información que esta en las tablas. 
+
+Sirve para que cualquier externo o del mismo equipo entienda qué información guarda el sistema, 
+el cómo se llama cada capcom, el tipo de dato que guarda y cómo se tiene que interpretar.
