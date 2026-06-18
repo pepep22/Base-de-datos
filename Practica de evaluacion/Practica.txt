@@ -1,0 +1,222 @@
+CREATE DATABASE IF NOT EXISTS series;
+USE series;
+CREATE TABLE series (
+ID_Serie INT AUTO_INCREMENT PRIMARY KEY,
+añoestreno VARCHAR (6),
+creador VARCHAR (30)
+);
+CREATE TABLE personajes (
+ID_Personaje INT AUTO_INCREMENT PRIMARY KEY,
+nombrepersonaje VARCHAR (30),
+ID_serie INT,
+rol VARCHAR (12),
+NivelEnergia VARCHAR (15),
+FOREIGN KEY (ID_serie) REFERENCES series(ID_Serie)
+);
+CREATE TABLE heroes (
+ID_heroes INT AUTO_INCREMENT PRIMARY KEY,
+ID_personaje INT,
+FOREIGN KEY (ID_personaje) REFERENCES personajes(ID_Personaje)
+);
+CREATE TABLE villanos (
+ID_villanos INT AUTO_INCREMENT PRIMARY KEY,
+ID_personaje INT,
+FOREIGN KEY (ID_personaje) REFERENCES personajes(ID_Personaje)
+);
+CREATE TABLE episodios (
+ID_Episodio INT AUTO_INCREMENT PRIMARY KEY,
+tituloepisodio VARCHAR (15),
+ID_personaje INT,
+duracion VARCHAR (30),
+rating VARCHAR (10),
+FOREIGN KEY (ID_personaje) REFERENCES personajes(ID_Personaje)
+);
+CREATE TABLE enemigos_historicos (
+ID_Rivalidades INT AUTO_INCREMENT PRIMARY KEY,
+ID_heroe INT,
+ID_vilanos INT,
+Encuentrostotales INT (10),
+FOREIGN KEY (ID_heroe) REFERENCES heroes(ID_heroes),
+FOREIGN KEY (ID_vilanos) REFERENCES villanos(ID_villanos)
+);
+CREATE TABLE objetos_misticos (
+ID_Objeto INT AUTO_INCREMENT PRIMARY KEY,
+nombreobjeto VARCHAR (30),
+valorsubasta INT (14),
+ID_dueño INT,
+FOREIGN KEY (ID_dueño) REFERENCES personajes(ID_Personaje)
+);
+CREATE TABLE habilidades_especiales (
+ID_habilidad INT AUTO_INCREMENT PRIMARY KEY,
+nombrehabilidad VARCHAR (30),
+creador VARCHAR (30)
+);
+
+INSERT INTO series (añoestreno, creador) VALUES
+('2010','Pendleton Ward'),
+('2005','Man of Action'),
+('2001','Maxwell Atoms'),
+('2010','J.G. Quintel'),
+('2007','John R. Dilworth'),
+('1996','Genndy Tartakovsky');
+
+INSERT INTO personajes 
+(nombrepersonaje, ID_serie, rol, NivelEnergia) VALUES
+('Finn el Humano',1,'Protagonista','85'),
+('Jake el Perro',1,'Protagonista','90'),
+('Rey Helado',1,'Antagonista','75'),
+('Ben Tennyson',2,'Protagonista','95'),
+('Vilgax',2,'Antagonista','98'),
+('Puro Hueso',3,'Secundario','80'),
+('Mordecai',4,'Protagonista','60'),
+('Rigby',4,'Protagonista','55'),
+('Coraje',5,'Protagonista','40'),
+('Dexter',6,'Protagonista','70');
+
+INSERT INTO heroes (ID_personaje) VALUES
+(1),
+(2),
+(4),
+(7),
+(8),
+(9),
+(10);
+
+
+INSERT INTO villanos (ID_personaje) VALUES
+(3),
+(5);
+
+
+INSERT INTO episodios 
+(tituloepisodio, ID_personaje, duracion, rating) VALUES
+('La aventura',1,'12','9.1'),
+('El bosque',2,'15','8.7'),
+('El hielo',3,'13','8.9'),
+('Omnitrix',4,'22','9.5'),
+('Vilgax ataca',5,'20','9.2'),
+('Calavera',6,'14','8.6'),
+('Trabajo',7,'11','7.9'),
+('Parque',8,'16','8.8'),
+('Monstruo',9,'18','8.5'),
+('Laboratorio',10,'10','9.0');
+
+INSERT INTO enemigos_historicos
+(ID_heroe, ID_vilanos, Encuentrostotales) VALUES
+(1,1,20),
+(3,2,30),
+(4,2,25),
+(2,1,18);
+
+INSERT INTO objetos_misticos
+(nombreobjeto,valorsubasta,ID_dueño) VALUES
+('Espada de Poder',150000,1),
+('Anillo Mágico',75000,2),
+('Espada Antigua',120000,4),
+('Corona Helada',30000,3),
+('Anillo Oscuro',200000,5),
+('Libro Místico',9000,10);
+
+INSERT INTO habilidades_especiales
+(nombrehabilidad, creador) VALUES
+('Super Fuerza','Finn'),
+('Espada Legendaria','Finn'),
+('Transformación','Ben'),
+('Omnitrix Supremo','Ben'),
+('Magia de Hielo','Rey Helado'),
+('Control Alienígena','Vilgax'),
+('Intelecto Superior','Dexter'),
+('Inventos','Dexter');
+
+SELECT creador, ID_Serie
+FROM series
+ORDER BY creador ASC;
+
+SELECT nombrepersonaje, rol
+FROM personajes
+WHERE nombrepersonaje LIKE 'B%'
+OR nombrepersonaje LIKE 'F%';
+
+SELECT *
+FROM episodios
+WHERE duracion > 11
+AND rating > 8.5;
+
+SELECT *
+FROM objetos_misticos
+WHERE nombreobjeto LIKE '%Espada%'
+OR nombreobjeto LIKE '%Anillo%';
+
+SELECT 
+MIN(NivelEnergia) AS Energia_Minima,
+MAX(NivelEnergia) AS Energia_Maxima
+FROM personajes
+WHERE rol = 'Antagonista';
+
+SELECT nombrehabilidad, COUNT(*) AS cantidad
+FROM habilidades_especiales
+GROUP BY nombrehabilidad;
+
+SELECT nombrepersonaje, NivelEnergia
+FROM personajes
+ORDER BY NivelEnergia DESC, nombrepersonaje ASC;
+
+SELECT ID_dueño, SUM(valorsubasta) AS total_valor
+FROM objetos_misticos
+WHERE valorsubasta > 5000
+GROUP BY ID_dueño
+ORDER BY total_valor DESC;
+
+SELECT s.ID_Serie, AVG(e.rating) AS promedio_rating
+FROM series s
+INNER JOIN personajes p
+ON s.ID_Serie = p.ID_serie
+INNER JOIN episodios e
+ON p.ID_Personaje = e.ID_personaje
+GROUP BY s.ID_Serie
+HAVING AVG(e.rating) > 7.5;
+
+SELECT ID_serie, COUNT(*) AS cantidad_personajes
+FROM personajes
+WHERE NivelEnergia > 50
+GROUP BY ID_serie;
+
+SELECT AVG(e.duracion) AS promedio_minutos
+FROM episodios e
+INNER JOIN personajes p
+ON e.ID_personaje = p.ID_Personaje
+INNER JOIN series s
+ON p.ID_serie = s.ID_Serie
+WHERE s.añoestreno > '2010';
+
+ALTER TABLE habilidades_especiales
+ADD ID_personaje INT;
+
+ALTER TABLE habilidades_especiales
+ADD FOREIGN KEY(ID_personaje)
+REFERENCES personajes(ID_Personaje);
+
+SELECT ID_personaje, COUNT(*) AS cantidad_habilidades
+FROM habilidades_especiales
+GROUP BY ID_personaje
+HAVING COUNT(*) > 3;
+
+SELECT *
+FROM enemigos_historicos
+WHERE Encuentrostotales > 15
+ORDER BY Encuentrostotales DESC;
+
+SELECT ID_dueño, MAX(valorsubasta) AS objeto_mas_caro
+FROM objetos_misticos
+GROUP BY ID_dueño
+HAVING MAX(valorsubasta) > 100000;
+
+SELECT s.ID_Serie,
+COUNT(e.ID_Episodio) AS total_episodios
+FROM series s
+INNER JOIN personajes p
+ON s.ID_Serie = p.ID_serie
+INNER JOIN episodios e
+ON p.ID_Personaje = e.ID_personaje
+GROUP BY s.ID_Serie
+ORDER BY total_episodios DESC;
