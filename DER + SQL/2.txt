@@ -1,0 +1,87 @@
+CREATE DATABASE IF NOT EXISTS Clinica;
+USE Clinica;
+
+CREATE TABLE IF NOT EXISTS Paciente (
+    ID_Paciente INT PRIMARY KEY,
+    Nombre VARCHAR(50) NOT NULL,
+    Apellido VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Medico (
+    ID_Medico INT PRIMARY KEY,
+    Nombre VARCHAR(50) NOT NULL,
+    Apellido VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Especialidad (
+    ID_Especialidad INT PRIMARY KEY,
+    NombreEspecialidad VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Medico_Especialidad (
+    ID_Medico INT,
+    ID_Especialidad INT,
+    PRIMARY KEY (ID_Medico, ID_Especialidad),
+    FOREIGN KEY (ID_Medico) REFERENCES Medico(ID_Medico),
+    FOREIGN KEY (ID_Especialidad) REFERENCES Especialidad(ID_Especialidad)
+);
+
+CREATE TABLE IF NOT EXISTS Turno (
+    ID_Turno INT PRIMARY KEY,
+    Fecha DATE NOT NULL,
+    Hora TIME NOT NULL,
+    Estado VARCHAR(20) NOT NULL,
+    ID_Paciente INT,
+    ID_Medico INT,
+    FOREIGN KEY (ID_Paciente) REFERENCES Paciente(ID_Paciente),
+    FOREIGN KEY (ID_Medico) REFERENCES Medico(ID_Medico)
+);
+
+INSERT INTO Paciente (ID_Paciente, Nombre, Apellido) VALUES
+(1, 'Juan', 'Perez'),
+(2, 'Maria', 'Gomez'),
+(3, 'Carlos', 'Lopez');
+
+INSERT INTO Medico (ID_Medico, Nombre, Apellido) VALUES
+(1, 'Ana', 'Rodriguez'),
+(2, 'Pedro', 'Fernandez'),
+(3, 'Laura', 'Sanchez');
+
+INSERT INTO Especialidad (ID_Especialidad, NombreEspecialidad) VALUES
+(1, 'Pediatria'),
+(2, 'Cardiologia'),
+(3, 'Clinica Medica');
+
+INSERT INTO Medico_Especialidad (ID_Medico, ID_Especialidad) VALUES
+(1, 1),
+(2, 2),
+(3, 3);
+
+INSERT INTO Turno (ID_Turno, Fecha, Hora, Estado, ID_Paciente, ID_Medico) VALUES
+(1, '2025-06-25', '09:00:00', 'Confirmado', 1, 1),
+(2, '2025-06-25', '10:00:00', 'Pendiente', 2, 2),
+(3, '2025-06-26', '11:30:00', 'Atendido', 3, 3);
+
+SELECT
+    m.ID_Medico,
+    m.Nombre,
+    m.Apellido,
+    e.NombreEspecialidad AS Especialidad
+FROM Medico m
+INNER JOIN Medico_Especialidad me
+    ON m.ID_Medico = me.ID_Medico
+INNER JOIN Especialidad e
+    ON me.ID_Especialidad = e.ID_Especialidad;
+
+SELECT
+    t.ID_Turno,
+    t.Fecha,
+    t.Hora,
+    t.Estado,
+    CONCAT(p.Nombre, ' ', p.Apellido) AS Paciente,
+    CONCAT(m.Nombre, ' ', m.Apellido) AS Medico
+FROM Turno t
+INNER JOIN Paciente p
+    ON t.ID_Paciente = p.ID_Paciente
+INNER JOIN Medico m
+    ON t.ID_Medico = m.ID_Medico;

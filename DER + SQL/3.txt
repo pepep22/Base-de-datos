@@ -1,0 +1,77 @@
+CREATE DATABASE IF NOT EXISTS CampeonatoFutbol;
+USE CampeonatoFutbol;
+
+CREATE TABLE Equipo (
+    ID_Equipo INT PRIMARY KEY,
+    Nombre VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Jugador (
+    ID_Jugador INT PRIMARY KEY,
+    Nombre VARCHAR(50) NOT NULL,
+    Posicion VARCHAR(30) NOT NULL,
+    ID_Equipo INT,
+    FOREIGN KEY (ID_Equipo) REFERENCES Equipo(ID_Equipo)
+);
+
+CREATE TABLE Estadio (
+    ID_Estadio INT PRIMARY KEY,
+    Nombre VARCHAR(50) NOT NULL,
+    Ciudad VARCHAR(50)
+);
+
+CREATE TABLE Partido (
+    ID_Partido INT PRIMARY KEY,
+    Fecha DATE NOT NULL,
+    ID_Equipo_Local INT,
+    ID_Equipo_Visitante INT,
+    Goles_Local INT,
+    Goles_Visitante INT,
+    Resultado VARCHAR(20),
+    ID_Estadio INT,
+    FOREIGN KEY (ID_Equipo_Local) REFERENCES Equipo(ID_Equipo),
+    FOREIGN KEY (ID_Equipo_Visitante) REFERENCES Equipo(ID_Equipo),
+    FOREIGN KEY (ID_Estadio) REFERENCES Estadio(ID_Estadio)
+);
+
+INSERT INTO Equipo VALUES
+(1,'Tigres'),
+(2,'Leones'),
+(3,'Halcones');
+
+INSERT INTO Jugador VALUES
+(1,'Juan Perez','Arquero',1),
+(2,'Carlos Gomez','Defensor',2),
+(3,'Luis Martinez','Delantero',3);
+
+INSERT INTO Estadio VALUES
+(1,'Estadio Central','Buenos Aires'),
+(2,'Monumental','Cordoba'),
+(3,'Ciudad Deportiva','Rosario');
+
+INSERT INTO Partido VALUES
+(1,'2025-06-01',1,2,2,1,'Gana Tigres',1),
+(2,'2025-06-08',2,3,0,0,'Empate',2),
+(3,'2025-06-15',3,1,1,3,'Gana Tigres',3);
+
+SELECT
+    p.ID_Partido,
+    p.Fecha,
+    el.Nombre AS Equipo_Local,
+    ev.Nombre AS Equipo_Visitante,
+    p.Goles_Local,
+    p.Goles_Visitante,
+    p.Resultado,
+    e.Nombre AS Estadio
+FROM Partido p
+INNER JOIN Equipo el
+    ON p.ID_Equipo_Local = el.ID_Equipo
+INNER JOIN Equipo ev
+    ON p.ID_Equipo_Visitante = ev.ID_Equipo
+INNER JOIN Estadio e
+    ON p.ID_Estadio = e.ID_Estadio;
+
+SELECT
+    Nombre AS Jugador,
+    Posicion
+FROM Jugador;

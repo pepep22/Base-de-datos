@@ -1,0 +1,31 @@
+create DATABASE if not EXISTS Tienda_online;
+USE Tienda_online;
+create table productos (
+ID_productos INT AUTO_INCREMENT PRIMARY KEY,
+Indumentaria VARCHAR(30),
+Precio INT (15)
+);
+create table cliente (
+ID_cliente INT AUTO_INCREMENT PRIMARY KEY,
+nombre VARCHAR (15),
+apellido VARCHAR (15),
+DNI VARCHAR (15)
+);
+create table empleados (
+ID_empleados INT AUTO_INCREMENT PRIMARY KEY,
+nombre VARCHAR (15),
+apellido VARCHAR (15),
+puesto VARCHAR (15)
+);
+create table pedidos (
+ID_pedidos INT AUTO_INCREMENT PRIMARY KEY,
+Indumentaria VARCHAR (30),
+total INT (12),
+ID_empleados INT,
+FOREIGN KEY(ID_empleados REFERENCES empleados(ID_empleados)
+);
+create table ventas (
+ID_ventas INT AUTO_INCREMENT PRIMARY KEY,
+vendedor VARCHAR (30),
+cliente VARCHAR (30)
+);
