@@ -1,0 +1,122 @@
+CREATE DATABASE IF NOT EXISTS series;
+USE series;
+
+CREATE TABLE series (
+IDseries INT AUTO_INCREMENT PRIMARY KEY,
+nombre VARCHAR (30),
+genero VARCHAR (15),
+añolanzamiento VARCHAR (14),
+presupuesto INT (10),
+plataforma VARCHAR (15),
+director VARCHAR (25),
+edaddirector INT (3),
+sueldodirector INT (10)
+);
+
+Create Table temporadas (
+IDtemporadas INT auto_increment Primary key,
+NombreTemporada VARCHAR (20),
+DescripcionTemporada VARCHAR (30),
+IDseries INT,
+FOREIGN KEY (IDseries) REFERENCES series(IDseries)
+);
+
+CREATE TABLE Personajes (
+IDpersonajes INT AUTO_INCREMENT PRIMARY KEY,
+NombrePersonaje VARCHAR (30),
+Edad VARCHAR (5),
+Genero VARCHAR (10),
+IDTemporadas INT,
+FOREIGN KEY (IDTemporadas) REFERENCES temporadas(IDtemporadas),
+ID_Series INT,
+FOREIGN KEY (ID_Series) REFERENCES series(IDseries)
+);
+
+CREATE TABLE Episodios (
+IDepisodio INT AUTO_INCREMENT PRIMARY KEY,
+NombreEpisodio VARCHAR (30), 
+Descripcion VARCHAR (300),
+Puntuacion FLOAT (6),
+fechaestreno INT (14),
+IDTemporadas INT,
+FOREIGN KEY (IDTemporadas) REFERENCES temporadas(IDtemporadas),
+ID_Series INT,
+FOREIGN KEY (ID_Series) REFERENCES series(IDseries)
+);
+
+INSERT INTO series
+(nombre, genero, añolanzamiento, presupuesto, plataforma, director, edaddirector, sueldodirector)
+VALUES
+('Stranger Things','Sci-Fi','2016',30000000,'Netflix','Duffer Brothers',40,600000),
+('The Bear','Drama','2022',12000000,'Disney+','Christopher Storer',43,350000),
+('The Last of Us','Post-apoc','2023',10000000,'Max','Craig Mazin',53,900000),
+('Succession','Drama','2018',9000000,'Max','Mark Mylod',59,750000),
+('The Boys','Acción','2019',11000000,'Prime Video','Eric Kripke',50,400000),
+('Black Mirror','Antología','2011',5000000,'Netflix','Charlie Brooker',53,300000),
+('Ted Lasso','Comedia','2020',15000000,'Apple TV', 'Declan Lowney',63,450000),
+('Severance','Suspenso','2022',40000000,'Apple TV','Ben Stiller',58,8000000),
+('Fallout','Sci-Fi','2024',15000000,'Prime Video','Jonathan Nolan',47,1200000),
+('Dark','Intriga','2017',18000000,'Netflix','Baran bo Odar',46,280000);
+
+INSERT INTO temporadas
+(NombreTemporada, DescripcionTemporada, IDseries)
+VALUES
+('Stranger Things 1','Desaparición de Will',1),
+('Stranger Things 4','El regreso de Vecna',1),
+('The Bear S1','El caos en la cocina',2),
+('The Last of Us S1','El viaje de Joel y Ellie',3),
+('Succession S4','La guerra final',4),
+('The Boys S1','Los héroes son malos',5),
+('Black Mirror S1','Tecnología y pesadillas',6),
+('Ted Lasso S1','Un DT de fútbol americano en UK',7),
+('Severance S1','Separación cerebral laboral',8),
+('Fallout S1','Salida del refugio 33',9);
+
+INSERT INTO personajes
+(NombrePersonaje, Edad, Genero, IDTemporadas, ID_Series)
+VALUES
+('Eleven',14,'Femenino',1,1),
+('Carmy Berzatto',28,'Masculino',3,2),
+('Joel Miller',52,'Masculino',4,3),
+('Ellie Williams',14,'Femenino',4,3),
+('Kendall Roy',40,'Masculino',5,4),
+('Homelander',38,'Masculino',6,5),
+('Ted Lasso',45,'Masculino',8,7),
+('Mark Scout',42,'Masculino',9,8),
+('Lucy MacLean',22,'Femenino',10,9),
+('Jonas Kahnwald',17,'Masculino',1,10);
+
+INSERT INTO Episodios
+(NombreEpisodio, Descripcion, Puntuacion, fechaestreno, IDTemporadas, ID_Series)
+VALUES
+('El mundo del revés', 'El inicio de todo', 9.2, 2016, 1, 1),
+('Dear Billy', 'El escape de Max', 9.8, 2022, 2, 1),
+('Sistema', 'El servicio más intenso', 9.5, 2022, 3, 2),
+('Mucho tiempo', 'La historia de Bill y Frank', 9.9, 2023, 4, 3),
+('Connor''s Wedding', 'Un giro inesperado', 10.0, 2023, 5, 4),
+( 'El nombre del juego', 'Hughie se une a los Boys', 8.8, 2019, 6, 5),
+( 'Himno Nacional', 'El episodio del primer ministro', 8.1, 2011, 7, 6),
+( 'Piloto', 'Ted llega a Richmond', 8.5, 2020, 8, 7),
+( 'Lo que somos', 'El final de temporada', 9.7, 2022, 9, 8),
+( 'El fin', 'Descubrimientos en el yermo', 9.4, 2024, 10, 9);
+
+SELECT NombrePersonaje
+FROM personajes
+WHERE genero LIKE 'Femenino';
+
+SELECT NombrePersonaje
+FROM personajes
+WHERE genero LIKE 'Masculino';
+
+SELECT director
+FROM series
+WHERE plataforma LIKE 'Prime Video';
+
+SELECT nombre
+FROM series
+WHERE IDseries = '1';
+
+SELECT NombreEpisodio
+FROM Episodios
+WHERE fechaestreno <= 2020
+ORDER BY Puntuacion = (SELECT MAX(Puntuacion) FROM Episodios);
