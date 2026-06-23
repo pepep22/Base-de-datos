@@ -1,0 +1,36 @@
+A. ¿Qué es una Clave Primaria (Primary Key) y para qué sirve en una tabla?
+
+Una Clave Primaria (PK) es un campo o conjunto de campos que identifica de manera única cada registro de una tabla. No puede repetirse ni contener valores nulos.
+
+Sirve para:
+
+Identificar cada registro de forma única.
+Evitar registros duplicados.
+Relacionar tablas mediante claves foráneas (FK).
+
+Ejemplo: En la tabla Mascotas, ID_Mascota identifica a cada mascota de manera única.
+
+B. Explique la diferencia entre dato e información.
+
+Dato: Valor aislado sin contexto. Ejemplo: "5", "Perro", "Juan".
+Información: Conjunto de datos organizados y con significado. Ejemplo: "La mascota Rocky es un perro de 5 años."
+2. Verdadero o Falso
+A. Un atributo es lo mismo que un campo.
+
+Verdadero
+
+En una base de datos relacional, atributo y campo suelen utilizarse como sinónimos para referirse a una columna de una tabla.
+
+B. En un DER, las relaciones 1 a N indican que un registro de la tabla A se relaciona con un solo registro de la tabla B.
+
+Falso
+
+Una relación 1:N significa que un registro de la tabla A puede relacionarse con muchos registros de la tabla B.
+
+Ejemplo: Un dueño puede tener muchas mascotas.
+
+C. El software propietario permite al usuario modificar el código fuente libremente.
+
+Falso
+
+El software propietario generalmente no permite acceder ni modificar libremente el código fuente.

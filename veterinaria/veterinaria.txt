@@ -1,0 +1,70 @@
+CREATE DATABASE IF NOT EXISTS Veterinaria;
+USE Veterinaria;
+
+CREATE TABLE Dueños (
+    ID_Dueño INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(30),
+    Apellido VARCHAR(30),
+    DNI VARCHAR(15),
+    Telefono VARCHAR(20)
+);
+
+CREATE TABLE Mascotas (
+    ID_Mascota INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(30),
+    Especie VARCHAR(20),
+    Edad INT,
+    Raza VARCHAR(30),
+    ID_Dueño INT,
+    FOREIGN KEY (ID_Dueño) REFERENCES Dueños(ID_Dueño)
+);
+
+CREATE TABLE Veterinarios (
+    ID_Veterinario INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(30),
+    Legajo VARCHAR(10),
+    Especialidad VARCHAR(30),
+    Turno VARCHAR(10)
+);
+
+CREATE TABLE Turnos (
+    ID_Turno INT AUTO_INCREMENT PRIMARY KEY,
+    Fecha DATE,
+    Hora TIME,
+    MotivoDeConsulta VARCHAR(100),
+    Turno VARCHAR(10),
+    ID_Mascota INT,
+    ID_Veterinario INT,
+    FOREIGN KEY (ID_Mascota) REFERENCES Mascotas(ID_Mascota),
+    FOREIGN KEY (ID_Veterinario) REFERENCES Veterinarios(ID_Veterinario)
+);
+
+INSERT INTO Dueños (Nombre, Apellido, DNI, Telefono)
+VALUES
+('Juan', 'Perez', '30111222', '1122334455'),
+('Maria', 'Gomez', '28999888', '1166778899');
+
+INSERT INTO Mascotas (Nombre, Especie, Edad, Raza, ID_Dueño)
+VALUES
+('Rocky', 'Perro', 5, 'Labrador', 1),
+('Mishi', 'Gato', 3, 'Siames', 2);
+
+INSERT INTO Veterinarios (Nombre, Legajo, Especialidad, Turno)
+VALUES
+('Carlos Ruiz', 'V001', 'Clinica General', 'Mañana'),
+('Ana Lopez', 'V002', 'Cirugia', 'Tarde');
+
+INSERT INTO Turnos (Fecha, Hora, MotivoDeConsulta, Turno, ID_Mascota, ID_Veterinario)
+VALUES
+('2024-05-10', '10:00:00', 'Vacunacion', 'Mañana', 1, 1),
+('2024-06-15', '16:30:00', 'Control General', 'Tarde', 2, 2);
+
+SELECT *
+FROM Mascotas;
+
+SELECT Nombre, Apellido
+FROM Dueños;
+
+SELECT *
+FROM Turnos
+WHERE Fecha > '2024-05-01';
