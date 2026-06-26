@@ -1,0 +1,117 @@
+CREATE DATABASE IF NOT EXISTS Biblioteca;
+USE Biblioteca;
+
+CREATE TABLE Autores (
+    id_autor INT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Libros (
+    id_libro INT PRIMARY KEY,
+    titulo VARCHAR(150) NOT NULL,
+    isbn VARCHAR(20) UNIQUE,
+    editorial VARCHAR(100),
+    nro_paginas INT
+);
+
+CREATE TABLE Autor_Libro (
+    id_autor INT,
+    id_libro INT,
+    PRIMARY KEY (id_autor, id_libro),
+    FOREIGN KEY (id_autor) REFERENCES Autores(id_autor),
+    FOREIGN KEY (id_libro) REFERENCES Libros(id_libro)
+);
+
+CREATE TABLE Ejemplares (
+    id_ejemplar INT PRIMARY KEY,
+    localizacion VARCHAR(100),
+    id_libro INT,
+    FOREIGN KEY (id_libro) REFERENCES Libros(id_libro)
+);
+
+CREATE TABLE Usuarios (
+    id_usuario INT PRIMARY KEY,
+    nombre VARCHAR(100),
+    direccion VARCHAR(150),
+    telefono VARCHAR(20)
+);
+
+CREATE TABLE Prestamos (
+    id_prestamo INT PRIMARY KEY,
+    id_usuario INT,
+    id_ejemplar INT,
+    fecha_prestamo DATE,
+    fecha_devolucion DATE,
+    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario),
+    FOREIGN KEY (id_ejemplar) REFERENCES Ejemplares(id_ejemplar)
+);
+
+INSERT INTO Autores VALUES
+(1,'Gabriel García Márquez'),
+(2,'Julio Cortázar'),
+(3,'Jorge Luis Borges'),
+(4,'Mario Vargas Llosa'),
+(5,'Isabel Allende');
+
+INSERT INTO Libros VALUES
+(1,'Cien años de soledad','9780307474728','Sudamericana',471),
+(2,'Rayuela','9788437604572','Cátedra',736),
+(3,'Ficciones','9788420633125','Alianza',224),
+(4,'La ciudad y los perros','9788420471833','Alfaguara',432),
+(5,'La casa de los espíritus','9788401352836','Plaza & Janés',448);
+
+INSERT INTO Autor_Libro VALUES
+(1,1),
+(2,2),
+(3,3),
+(4,4),
+(5,5);
+
+INSERT INTO Ejemplares VALUES
+(1,'Estante A1',1),
+(2,'Estante A2',2),
+(3,'Estante B1',3),
+(4,'Estante B2',4),
+(5,'Estante C1',5);
+
+INSERT INTO Usuarios VALUES
+(1,'Juan Perez','Calle 123','111111111'),
+(2,'Ana Gomez','Av. Central 456','222222222'),
+(3,'Carlos Ruiz','Barrio Norte 789','333333333'),
+(4,'Maria Lopez','San Martin 101','444444444'),
+(5,'Pedro Diaz','Belgrano 202','555555555');
+
+INSERT INTO Prestamos VALUES
+(1,1,1,'2025-06-01','2025-06-10'),
+(2,2,2,'2025-06-02','2025-06-12'),
+(3,3,3,'2025-06-03','2025-06-13'),
+(4,4,4,'2025-06-04','2025-06-14'),
+(5,5,5,'2025-06-05','2025-06-15');
+
+SELECT l.titulo, a.nombre
+FROM Libros l
+JOIN Autor_Libro al ON l.id_libro = al.id_libro
+JOIN Autores a ON al.id_autor = a.id_autor;
+
+SELECT e.id_ejemplar, l.titulo, e.localizacion
+FROM Ejemplares e
+JOIN Libros l ON e.id_libro = l.id_libro;
+
+SELECT u.nombre, p.fecha_prestamo, p.fecha_devolucion
+FROM Usuarios u
+JOIN Prestamos p ON u.id_usuario = p.id_usuario;
+
+SELECT u.nombre, l.titulo, p.fecha_prestamo, p.fecha_devolucion
+FROM Prestamos p
+JOIN Usuarios u ON p.id_usuario = u.id_usuario
+JOIN Ejemplares e ON p.id_ejemplar = e.id_ejemplar
+JOIN Libros l ON e.id_libro = l.id_libro;
+
+SELECT COUNT(*) AS cantidad_libros
+FROM Libros;
+
+SELECT COUNT(*) AS cantidad_usuarios
+FROM Usuarios;
+
+SELECT COUNT(*) AS cantidad_prestamos
+FROM Prestamos;

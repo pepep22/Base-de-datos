@@ -1,0 +1,110 @@
+CREATE DATABASE IF NOT EXISTS LigaFutbol;
+USE LigaFutbol;
+
+CREATE TABLE Equipos (
+    id_equipo INT PRIMARY KEY,
+    nombre_equipo VARCHAR(100),
+    nombre_estadio VARCHAR(100),
+    aforo INT,
+    anio_fundacion INT,
+    ciudad VARCHAR(100)
+);
+
+CREATE TABLE Jugadores (
+    id_jugador INT PRIMARY KEY,
+    nombre VARCHAR(100),
+    fecha_nacimiento DATE,
+    posicion VARCHAR(50),
+    id_equipo INT,
+    FOREIGN KEY (id_equipo) REFERENCES Equipos(id_equipo)
+);
+
+CREATE TABLE Presidentes (
+    id_presidente INT PRIMARY KEY,
+    nombre VARCHAR(100),
+    apellido VARCHAR(100),
+    dni VARCHAR(15) UNIQUE,
+    fecha_nacimiento DATE,
+    id_equipo INT UNIQUE,
+    anio_presidente_elegido INT,
+    FOREIGN KEY (id_equipo) REFERENCES Equipos(id_equipo)
+);
+
+CREATE TABLE Partidos (
+    id_partido INT PRIMARY KEY,
+    fecha DATE,
+    goles_equipo_casa INT,
+    goles_equipo_fuera INT
+);
+
+CREATE TABLE Goles (
+    id_gol INT PRIMARY KEY,
+    id_partido INT,
+    id_jugador INT,
+    minuto_del_gol INT,
+    descripcion_del_gol VARCHAR(255),
+    FOREIGN KEY (id_partido) REFERENCES Partidos(id_partido),
+    FOREIGN KEY (id_jugador) REFERENCES Jugadores(id_jugador)
+);
+
+INSERT INTO Equipos VALUES
+(1,'River Plate','Monumental',84000,1901,'Buenos Aires'),
+(2,'Boca Juniors','La Bombonera',54000,1905,'Buenos Aires'),
+(3,'Racing Club','Presidente Perón',51000,1903,'Avellaneda'),
+(4,'Independiente','Libertadores de América',48000,1905,'Avellaneda'),
+(5,'San Lorenzo','Nuevo Gasómetro',47000,1908,'Buenos Aires');
+
+INSERT INTO Jugadores VALUES
+(1,'Franco Armani','1986-10-16','Portero',1),
+(2,'Edinson Cavani','1987-02-14','Delantero',2),
+(3,'Juan Nardoni','2002-07-14','Centrocampista',3),
+(4,'Kevin Lomónaco','2002-01-08','Defensa',4),
+(5,'Iker Muniain','1992-12-19','Centrocampista',5);
+
+INSERT INTO Presidentes VALUES
+(1,'Jorge','Brito','20111111','1968-07-12',1,2021),
+(2,'Juan Roman','Riquelme','20222222','1978-06-24',2,2023),
+(3,'Diego','Milito','20333333','1979-06-12',3,2024),
+(4,'Nestor','Grindetti','20444444','1955-10-15',4,2022),
+(5,'Marcelo','Moretti','20555555','1976-08-22',5,2023);
+
+INSERT INTO Partidos VALUES
+(1,'2025-03-01',2,1),
+(2,'2025-03-08',1,1),
+(3,'2025-03-15',3,2),
+(4,'2025-03-22',0,0),
+(5,'2025-03-29',4,1);
+
+INSERT INTO Goles VALUES
+(1,1,2,15,'Remate cruzado al ángulo'),
+(2,1,1,32,'Gol de cabeza tras córner'),
+(3,2,3,45,'Disparo desde fuera del área'),
+(4,3,4,67,'Gol tras rebote en el área'),
+(5,5,5,88,'Tiro libre directo');
+
+SELECT j.nombre, e.nombre_equipo
+FROM Jugadores j
+JOIN Equipos e ON j.id_equipo = e.id_equipo;
+
+SELECT p.nombre, p.apellido, e.nombre_equipo
+FROM Presidentes p
+JOIN Equipos e ON p.id_equipo = e.id_equipo;
+
+SELECT g.id_gol, j.nombre AS jugador, g.minuto_del_gol, g.descripcion_del_gol
+FROM Goles g
+JOIN Jugadores j ON g.id_jugador = j.id_jugador;
+
+SELECT pa.id_partido, pa.fecha, pa.goles_equipo_casa, pa.goles_equipo_fuera
+FROM Partidos pa;
+
+SELECT COUNT(*) AS total_equipos
+FROM Equipos;
+
+SELECT COUNT(*) AS total_jugadores
+FROM Jugadores;
+
+SELECT COUNT(*) AS total_partidos
+FROM Partidos;
+
+SELECT COUNT(*) AS total_goles
+FROM Goles;
