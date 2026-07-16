@@ -1,0 +1,154 @@
+CREATE DATABASE IF NOT EXISTS PokemonDB;
+USE PokemonDB;
+
+CREATE TABLE IF NOT EXISTS Gimnasio (
+    ID_Gimnasio INT PRIMARY KEY AUTO_INCREMENT,
+    Ciudad VARCHAR(50),
+    Entrenadores INT,
+    BatallasRealizadas INT,
+    Lider VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS Pokemons (
+    ID_Pokemon INT PRIMARY KEY AUTO_INCREMENT,
+    TipoDeElemento VARCHAR(30),
+    NivelDePoder INT,
+    Batallas INT
+);
+
+CREATE TABLE IF NOT EXISTS Entrenadores (
+    ID_Entrenador INT PRIMARY KEY AUTO_INCREMENT,
+    Nombre VARCHAR(50),
+    Edad INT,
+    Gimnasio INT,
+    Ciudad VARCHAR(50),
+    Experiencia INT,
+    Victorias INT,
+    Pokemons INT,
+    FOREIGN KEY (Gimnasio) REFERENCES Gimnasio(ID_Gimnasio),
+    FOREIGN KEY (Pokemons) REFERENCES Pokemons(ID_Pokemon)
+);
+
+CREATE TABLE IF NOT EXISTS BatallasPokemons (
+    ID_Batalla INT PRIMARY KEY AUTO_INCREMENT,
+    Ganador INT,
+    Perdedor INT,
+    Participantes VARCHAR(100),
+    Fecha DATE,
+    FOREIGN KEY (Ganador) REFERENCES Pokemons(ID_Pokemon),
+    FOREIGN KEY (Perdedor) REFERENCES Pokemons(ID_Pokemon)
+);
+
+INSERT INTO Gimnasio (Ciudad, Entrenadores, BatallasRealizadas, Lider)
+VALUES
+('Celadon', 2, 15, 'Erika'),
+('Pewter', 1, 10, 'Brock'),
+('Cerulean', 1, 12, 'Misty');
+
+INSERT INTO Pokemons (TipoDeElemento, NivelDePoder, Batallas)
+VALUES
+('Fuego', 60, 20),
+('Agua', 55, 18),
+('Planta', 45, 12),
+('Eléctrico', 70, 25),
+('Fuego', 80, 30);
+
+INSERT INTO Entrenadores (Nombre, Edad, Gimnasio, Ciudad, Experiencia, Victorias, Pokemons)
+VALUES
+('Ash', 16, 1, 'Celadon', 100, 80, 4),
+('Gary', 17, 2, 'Pewter', 90, 75, 1),
+('Misty', 18, 3, 'Cerulean', 95, 85, 2),
+('Erika', 22, 1, 'Celadon', 120, 110, 3),
+('Brock', 20, 2, 'Pewter', 110, 95, 5);
+
+INSERT INTO BatallasPokemons (Ganador, Perdedor, Participantes, Fecha)
+VALUES
+(4, 1, 'Pikachu vs Charizard', '2026-06-20'),
+(5, 2, 'Charizard vs Blastoise', '2026-06-21'),
+(1, 3, 'Charizard vs Venusaur', '2026-06-22'),
+(2, 4, 'Blastoise vs Pikachu', '2026-06-23'),
+(5, 3, 'Charizard vs Venusaur', '2026-06-24');
+
+
+SELECT e.Nombre, e.Ciudad, g.ID_Gimnasio
+FROM Entrenadores e
+INNER JOIN Gimnasio g
+ON e.Gimnasio = g.ID_Gimnasio;
+
+SELECT ID_Pokemon, TipoDeElemento
+FROM Pokemons;
+
+SELECT *
+FROM Pokemons
+WHERE NivelDePoder > 50;
+
+SELECT p.ID_Pokemon,
+       p.TipoDeElemento,
+       p.NivelDePoder,
+       e.Nombre AS Entrenador
+FROM Pokemons p
+INNER JOIN Entrenadores e
+ON e.Pokemons = p.ID_Pokemon
+WHERE p.TipoDeElemento = 'Fuego'
+ORDER BY p.NivelDePoder ASC;
+
+SELECT ID_Pokemon
+FROM Pokemons
+WHERE ID_Pokemon IN (
+    SELECT Pokemons
+    FROM Entrenadores
+    WHERE Ciudad = 'Celadon'
+);
+
+SELECT *
+FROM Pokemons
+WHERE NivelDePoder > (
+    SELECT AVG(NivelDePoder)
+    FROM Pokemons
+);
+
+SELECT *
+FROM Pokemons
+WHERE ID_Pokemon IN (
+    SELECT Ganador
+    FROM BatallasPokemons
+);
+
+DELIMITER //
+
+CREATE PROCEDURE SubirNivel(
+    IN pEntrenador INT,
+    IN pNivel INT
+)
+BEGIN
+    UPDATE Pokemons
+    SET NivelDePoder = NivelDePoder + pNivel
+    WHERE ID_Pokemon = (
+        SELECT Pokemons
+        FROM Entrenadores
+        WHERE ID_Entrenador = pEntrenador
+    );
+END //
+
+DELIMITER ;
+
+CALL SubirNivel(1,5);
+
+DELIMITER //
+
+CREATE PROCEDURE RegistrarBatalla(
+    IN pGanador INT,
+    IN pPerdedor INT,
+    IN pParticipantes VARCHAR(100),
+    IN pFecha DATE
+)
+BEGIN
+    INSERT INTO BatallasPokemons
+    (Ganador, Perdedor, Participantes, Fecha)
+    VALUES
+    (pGanador, pPerdedor, pParticipantes, pFecha);
+END //
+
+DELIMITER ;
+
+CALL RegistrarBatalla(1,2,'Pikachu vs Charizard','2026-06-27');
