@@ -1,0 +1,78 @@
+Create DATABASE IF NOT EXISTS carniceria_chapala;
+USE carniceria_chapala;
+
+Create table carnicero(
+IDcarnicero int not null auto_increment Primary Key,
+nombre VARCHAR(25) not null,
+apellido VARCHAR(25),
+Telefono INT(12) NOT NULL,
+DNI INT(8) NOT NULL
+);
+
+Create table Clientes(
+IDcliente INT NOT NULL auto_increment PRIMARY KEY,
+nombre VARCHAR(25) not null,
+Telefono INT(12) NOT NULL,
+MedioPago VARCHAR(25) NOT NULL
+);
+
+Create table Pedidos(
+IDpedido INT NOT NULL auto_increment PRIMARY KEY,
+CorteCarne VARCHAR(25) not null,
+Precio INT(15) NOT NULL,
+IDcarnicero INT,
+IDcliente INT,
+Estado VARCHAR(12),
+FOREIGN KEY (IDcarnicero) REFERENCES carnicero(IDcarnicero),
+FOREIGN KEY (IDcliente) REFERENCES Clientes(IDcliente)
+);
+
+INSERT INTO carnicero (nombre, apellido, Telefono, DNI) VALUES
+('Carlos', 'Gomez', 1127685491, 30123456),
+('Juan', 'Martinez', 1198354120, 32123456),
+('Lucas', 'Rodriguez', 1105734519, 33123459);
+
+INSERT INTO Clientes (nombre, Telefono, MedioPago) VALUES
+('Maria', 1134567890, 'Tarjeta'),
+('Jose', 1145678901, 'Mercado Pago'),
+('Sofia', 1156789012, 'Efectivo');
+
+INSERT INTO Pedidos (CorteCarne, Precio, IDcarnicero, IDcliente, Estado) VALUES
+('Asado', 8500, 1, 1, 'Entregado'),
+('Vacío', 9200, 2, 2, 'Pendiente'),
+('Asado', 8500, 3, 1, 'Pendiente');
+
+SELECT CorteCarne, COUNT(*) AS CantidadVentas
+FROM Pedidos
+GROUP BY CorteCarne
+ORDER BY CantidadVentas DESC
+LIMIT 1;
+
+SELECT c.IDcliente, c.nombre, COUNT(p.IDpedido) AS CantidadCompras
+FROM Clientes c
+INNER JOIN Pedidos p ON c.IDcliente = p.IDcliente
+GROUP BY c.IDcliente, c.nombre
+ORDER BY CantidadCompras DESC
+LIMIT 1;
+
+SELECT ca.IDcarnicero, ca.nombre, ca.apellido,
+       COUNT(DISTINCT p.IDcliente) AS CantidadClientes
+FROM carnicero ca
+INNER JOIN Pedidos p ON ca.IDcarnicero = p.IDcarnicero
+GROUP BY ca.IDcarnicero, ca.nombre, ca.apellido
+ORDER BY CantidadClientes DESC
+LIMIT 1;
+
+SELECT c.nombre AS Cliente,
+       p.CorteCarne AS ContenidoPedido,
+       ca.nombre AS Carnicero,
+       p.Precio
+FROM Pedidos p
+INNER JOIN Clientes c ON p.IDcliente = c.IDcliente
+INNER JOIN carnicero ca ON p.IDcarnicero = ca.IDcarnicero
+ORDER BY p.Precio DESC
+LIMIT 1;
+
+SELECT CorteCarne, COUNT(*) AS CantidadVentas
+FROM Pedidos
+GROUP BY CorteCarne;
