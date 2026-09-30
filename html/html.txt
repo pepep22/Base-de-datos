@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Guía de SQL</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<header class="hero" id="inicio">
+
+    <nav class="navbar">
+
+        <div class="logo">
+            <span class="logo-icon">&lt;/&gt;</span>
+            <span>Guía <span class="logo-blue">de SQL</span></span>
+        </div>
+
+        <div class="nav-links">
+            <a href="#conceptos">Conceptos</a>
+            <a href="#consultas">Consultas</a>
+            <a href="#joins">JOIN</a>
+            <a href="#agregacion">Agregación</a>
+            <a href="#comandos">Comandos</a>
+        </div>
+
+    </nav>
+
+</header>
+
+
+<main>
+
+<section id="conceptos">
+
+    <div class="section-label">01 — CONCEPTOS</div>
+
+    <h2>¿Qué es SQL?</h2>
+
+    <p class="section-description">
+        SQL (<strong>Structured Query Language</strong>) es un lenguaje
+        utilizado para comunicarse con bases de datos relacionales.
+    </p>
+
+    <div class="info-grid">
+
+        <div class="info-card">
+            <div class="card-icon blue">⌕</div>
+            <h3>Consultar</h3>
+            <p>
+                Obtener información almacenada en una base de datos.
+            </p>
+        </div>
+
+        <div class="info-card">
+            <div class="card-icon purple">＋</div>
+            <h3>Insertar</h3>
+            <p>
+                Agregar nuevos registros dentro de las tablas.
+            </p>
+        </div>
+
+        <div class="info-card">
+            <div class="card-icon green">↻</div>
+            <h3>Modificar</h3>
+            <p>
+                Actualizar información que ya existe.
+            </p>
+        </div>
+
+        <div class="info-card">
+            <div class="card-icon red">×</div>
+            <h3>Eliminar</h3>
+            <p>
+                Eliminar registros que ya no son necesarios.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="database-section">
+
+    <div class="section-label">02 — BASE DE DATOS</div>
+
+    <h2>Ejemplo de una tabla</h2>
+
+    <p class="section-description">
+        Para aprender SQL utilizaremos una tabla llamada
+        <code>usuarios</code>.
+    </p>
+
+    <div class="database">
+
+        <div class="database-header">
+            <span>👤</span>
+            <strong>usuarios</strong>
+        </div>
+
+        <div class="database-table">
+
+            <div class="table-row table-head">
+                <span>ID</span>
+                <span>Nombre</span>
+                <span>Email</span>
+                <span>Edad</span>
+                <span>Ciudad</span>
+            </div>
+
+            <div class="table-row">
+                <span>1</span>
+                <span>Juan</span>
+                <span>juan@email.com</span>
+                <span>21</span>
+                <span>Buenos Aires</span>
+            </div>
+
+            <div class="table-row">
+                <span>2</span>
+                <span>María</span>
+                <span>maria@email.com</span>
+                <span>25</span>
+                <span>Quilmes</span>
+            </div>
+
+            <div class="table-row">
+                <span>3</span>
+                <span>Carlos</span>
+                <span>carlos@email.com</span>
+                <span>19</span>
+                <span>La Plata</span>
+            </div>
+
+            <div class="table-row">
+                <span>4</span>
+                <span>Ana</span>
+                <span>32</span>
+                <span>Morón</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section id="consultas">
+
+    <div class="section-label">03 — CONSULTAS</div>
+
+    <h2>SELECT</h2>
+
+    <p class="section-description">
+        <code>SELECT</code> permite seleccionar información de una tabla.
+    </p>
+
+    <div class="code-window">
+
+        <div class="code-top">
+            <div class="dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <span class="filename">consulta.sql</span>
+        </div>
+
+<pre><code><span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> usuarios;</code></pre>
+
+</section>
+
+<section>
+
+    <div class="section-label">04 — WHERE</div>
+
+    <h2>WHERE</h2>
+
+    <p class="section-description">
+        Utiliza <code>WHERE</code> para obtener solamente los registros
+        que cumplen una condición.
+    </p>
+
+    <div class="topic-grid">
+
+        <div class="topic-info">
+
+            <h3>¿Para qué sirve?</h3>
+
+            <ul class="check-list">
+                <li>Filtrar usuarios mayores de edad.</li>
+                <li>Buscar productos específicos.</li>
+                <li>Filtrar información por fecha.</li>
+                <li>Buscar registros que cumplan condiciones.</li>
+            </ul>
+
+        </div>
+
+        <div class="code-window small">
+
+            <div class="code-top">
+                <div class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <span class="filename">where.sql</span>
+            </div>
+
+<pre><code><span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> usuarios
+<span class="keyword">WHERE</span> edad &gt;= <span class="number">18</span>;</code></pre>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section>
+
+    <div class="section-label">05 — OPERADORES</div>
+
+    <h2>Condiciones en SQL</h2>
+
+    <p class="section-description">
+        Puedes combinar <code>WHERE</code> con diferentes operadores.
+    </p>
+
+    <div class="accordion">
+
+        <details open>
+            <summary>
+                Operadores de comparación
+                <span>+</span>
+            </summary>
+
+            <div class="accordion-content">
+
+                <div class="operator-grid">
+                    <div><code>=</code><span>Igual</span></div>
+                    <div><code>&lt;&gt;</code><span>Diferente</span></div>
+                    <div><code>&gt;</code><span>Mayor que</span></div>
+                    <div><code>&lt;</code><span>Menor que</span></div>
+                    <div><code>&gt;=</code><span>Mayor o igual</span></div>
+                    <div><code>&lt;=</code><span>Menor o igual</span></div>
+                </div>
+
+            </div>
+        </details>
+
+
+        <details>
+            <summary>
+                AND / OR / NOT
+                <span>+</span>
+            </summary>
+
+            <div class="accordion-content">
+
+<pre><code><span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> usuarios
+<span class="keyword">WHERE</span> edad &gt; <span class="number">18</span>
+<span class="keyword">AND</span> ciudad = <span class="string">'Quilmes'</span>;</code></pre>
+
+            </div>
+        </details>
+
+
+        <details>
+            <summary>
+                IN
+                <span>+</span>
+            </summary>
+
+            <div class="accordion-content">
+
+<pre><code><span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> usuarios
+<span class="keyword">WHERE</span> ciudad
+<span class="keyword">IN</span> (
+    <span class="string">'Quilmes'</span>,
+    <span class="string">'La Plata'</span>
+);</code></pre>
+
+            </div>
+        </details>
+
+
+        <details>
+            <summary>
+                BETWEEN
+                <span>+</span>
+            </summary>
+
+            <div class="accordion-content">
+
+<pre><code><span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> usuarios
+<span class="keyword">WHERE</span> edad
+<span class="keyword">BETWEEN</span> <span class="number">18</span> <span class="keyword">AND</span> <span class="number">30</span>;</code></pre>
+
+            </div>
+        </details>
+
+
+        <details>
+            <summary>
+                LIKE
+                <span>+</span>
+            </summary>
+
+            <div class="accordion-content">
+
+<pre><code><span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> usuarios
+<span class="keyword">WHERE</span> nombre
+<span class="keyword">LIKE</span> <span class="string">'J%'</span>;</code></pre>
+
+                <p>
+                    El símbolo <code>%</code> representa cualquier cantidad
+                    de caracteres.
+                </p>
+
+            </div>
+        </details>
+
+
+        <details>
+            <summary>
+                IS NULL / IS NOT NULL
+                <span>+</span>
+            </summary>
+
+            <div class="accordion-content">
+
+<pre><code><span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> usuarios
+<span class="keyword">WHERE</span> email
+<span class="keyword">IS NOT NULL</span>;</code></pre>
+
+            </div>
+        </details>
+
+    </div>
+
+</section>
+
+<section>
+
+    <div class="section-label">06 — ORDER BY</div>
+
+    <h2>ORDER BY</h2>
+
+    <p class="section-description">
+        Permite ordenar los resultados de una consulta.
+    </p>
+
+    <div class="code-window">
+
+        <div class="code-top">
+            <span class="filename">order.sql</span>
+        </div>
+
+<pre><code><span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> usuarios
+<span class="keyword">ORDER BY</span> edad <span class="keyword">DESC</span>;</code></pre>
+
+    </div>
+
+    <div class="mini-cards">
+
+        <div>
+            <code>ASC</code>
+            <p>Orden ascendente.</p>
+        </div>
+
+        <div>
+            <code>DESC</code>
+            <p>Orden descendente.</p>
+        </div>
+
+    </div>
+
+</section>
+
+<section id="agregacion">
+
+    <div class="section-label">08 — AGREGACIÓN</div>
+
+    <h2>Funciones de agregación</h2>
+
+    <p class="section-description">
+        Las funciones de agregación permiten realizar cálculos sobre
+        múltiples registros.
+    </p>
+
+    <div class="function-grid">
+
+        <div class="function-card">
+            <span class="function-name">COUNT()</span>
+            <h3>Contar registros</h3>
+            <p>Cuenta la cantidad de registros.</p>
+
+<pre><code><span class="keyword">SELECT COUNT</span>(*)
+<span class="keyword">FROM</span> usuarios;</code></pre>
+        </div>
+
+
+        <div class="function-card">
+            <span class="function-name">SUM()</span>
+            <h3>Sumar valores</h3>
+            <p>Calcula la suma de una columna numérica.</p>
+
+<pre><code><span class="keyword">SELECT SUM</span>(precio)
+<span class="keyword">FROM</span> productos;</code></pre>
+        </div>
+
+
+        <div class="function-card">
+            <span class="function-name">AVG()</span>
+            <h3>Calcular promedio</h3>
+            <p>Obtiene el promedio de los valores.</p>
+
+<pre><code><span class="keyword">SELECT AVG</span>(edad)
+<span class="keyword">FROM</span> usuarios;</code></pre>
+        </div>
+
+
+        <div class="function-card">
+            <span class="function-name">MAX()</span>
+            <h3>Obtener máximo</h3>
+            <p>Devuelve el valor más alto.</p>
+
+<pre><code><span class="keyword">SELECT MAX</span>(edad)
+<span class="keyword">FROM</span> usuarios;</code></pre>
+        </div>
+
+
+        <div class="function-card">
+            <span class="function-name">MIN()</span>
+            <h3>Obtener mínimo</h3>
+            <p>Devuelve el valor más pequeño.</p>
+
+<pre><code><span class="keyword">SELECT MIN</span>(edad)
+<span class="keyword">FROM</span> usuarios;</code></pre>
+        </div>
+
+    </div>
+
+</section>
+
+<section>
+
+    <div class="section-label">09 — GROUP BY</div>
+
+    <h2>GROUP BY</h2>
+
+    <p class="section-description">
+        Agrupa registros que tienen el mismo valor en una determinada
+        columna.
+    </p>
+
+    <div class="code-window">
+
+        <div class="code-top">
+            <span class="filename">group.sql</span>
+        </div>
+
+<pre><code><span class="keyword">SELECT</span>
+    ciudad,
+    <span class="keyword">COUNT</span>(*) <span class="keyword">AS</span> cantidad
+
+<span class="keyword">FROM</span> usuarios
+
+<span class="keyword">GROUP BY</span> ciudad;</code></pre>
+
+    </div>
+
+</section>
+
+<section>
+
+    <div class="section-label">10 — FILTRAR GRUPOS</div>
+
+    <h2>HAVING</h2>
+
+    <p class="section-description">
+        <code>HAVING</code> permite filtrar los grupos creados mediante
+        <code>GROUP BY</code>.
+    </p>
+
+    <div class="topic-grid">
+
+        <div class="topic-info">
+
+            <h3>WHERE vs HAVING</h3>
+
+            <div class="comparison">
+
+                <div>
+                    <code>WHERE</code>
+                    <p>
+                        Filtra registros antes de agrupar.
+                    </p>
+                </div>
+
+                <div>
+                    <code>HAVING</code>
+                    <p>
+                        Filtra grupos después de utilizar GROUP BY.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="code-window small">
+
+            <div class="code-top">
+                <span class="filename">having.sql</span>
+            </div>
+
+<pre><code><span class="keyword">SELECT</span>
+    ciudad,
+    <span class="keyword">COUNT</span>(*) <span class="keyword">AS</span> cantidad
+
+<span class="keyword">FROM</span> usuarios
+
+<span class="keyword">GROUP BY</span> ciudad
+
+<span class="keyword">HAVING COUNT</span>(*) &gt; <span class="number">2</span>;</code></pre>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section id="joins">
+
+    <div class="section-label">11 — RELACIONAR TABLAS</div>
+
+    <h2>JOIN</h2>
+
+    <p class="section-description">
+        Los JOIN permiten combinar información proveniente de diferentes
+        tablas mediante columnas relacionadas.
+    </p>
+
+    <div class="accordion">
+
+        <details open>
+
+            <summary>
+                INNER JOIN
+                <span>+</span>
+            </summary>
+
+            <div class="accordion-content">
+
+                <p>
+                    Devuelve solamente los registros que tienen coincidencia
+                    en ambas tablas.
+                </p>
+
+<pre><code><span class="keyword">SELECT</span>
+    usuarios.nombre,
+    pedidos.producto
+
+<span class="keyword">FROM</span> usuarios
+
+<span class="keyword">INNER JOIN</span> pedidos
+    <span class="keyword">ON</span> usuarios.id = pedidos.usuario_id;</code></pre>
+
+            </div>
+
+        </details>
+
+
+        <details>
+
+            <summary>
+                LEFT JOIN
+                <span>+</span>
+            </summary>
+
+            <div class="accordion-content">
+
+                <p>
+                    Devuelve todos los registros de la tabla izquierda y
+                    las coincidencias de la tabla derecha.
+                </p>
+
+<pre><code><span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> usuarios
+
+<span class="keyword">LEFT JOIN</span> pedidos
+<span class="keyword">ON</span> usuarios.id = pedidos.usuario_id;</code></pre>
+
+            </div>
+
+        </details>
+
+
+        <details>
+
+            <summary>
+                RIGHT JOIN
+                <span>+</span>
+            </summary>
+
+            <div class="accordion-content">
+
+                <p>
+                    Devuelve todos los registros de la tabla derecha y
+                    las coincidencias de la tabla izquierda.
+                </p>
+
+<pre><code><span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> usuarios
+
+<span class="keyword">RIGHT JOIN</span> pedidos
+<span class="keyword">ON</span> usuarios.id = pedidos.usuario_id;</code></pre>
+
+            </div>
+
+        </details>
+
+            <div class="accordion-content">
+
+                <p>
+                    Devuelve los registros coincidentes y también los que
+                    no tienen coincidencia en ninguna de las dos tablas.
+                </p>
+</section>
+
+<section>
+
+    <div class="section-label">13 — LIMIT</div>
+
+    <h2>LIMIT</h2>
+
+    <p class="section-description">
+        Permite limitar la cantidad de resultados devueltos.
+    </p>
+
+<pre class="standalone-code"><code><span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> usuarios
+<span class="keyword">LIMIT</span> <span class="number">10</span>;</code></pre>
+
+</section>
+
+<section>
+
+    <div class="section-label">14 — CONDICIONES</div>
+
+    <h2>CASE</h2>
+
+    <p class="section-description">
+        <code>CASE</code> permite crear condiciones dentro de una consulta.
+    </p>
+
+<pre class="standalone-code"><code><span class="keyword">SELECT</span>
+    nombre,
+    edad,
+
+    <span class="keyword">CASE</span>
+        <span class="keyword">WHEN</span> edad &gt;= <span class="number">18</span>
+            <span class="keyword">THEN</span> <span class="string">'Mayor de edad'</span>
+
+        <span class="keyword">ELSE</span>
+            <span class="string">'Menor de edad'</span>
+    <span class="keyword">END AS</span> categoria
+
+<span class="keyword">FROM</span> usuarios;</code></pre>
+
+</section>
+
+<section>
+
+    <div class="section-label">15 — SUBCONSULTAS</div>
+
+    <h2>Subconsultas</h2>
+
+    <p class="section-description">
+        Una subconsulta es una consulta SQL dentro de otra consulta.
+    </p>
+
+<pre class="standalone-code"><code><span class="keyword">SELECT</span> nombre
+<span class="keyword">FROM</span> usuarios
+
+<span class="keyword">WHERE</span> edad &gt;
+(
+    <span class="keyword">SELECT AVG</span>(edad)
+    <span class="keyword">FROM</span> usuarios
+);</code></pre>
+
+</section>
+
+<section id="comandos">
+
+    <div class="section-label">16 — CRUD</div>
+
+    <h2>INSERT, UPDATE y DELETE</h2>
+
+    <p class="section-description">
+        Son algunas de las operaciones fundamentales para modificar
+        información.
+    </p>
+
+    <div class="commands">
+
+        <div class="command-card">
+            <span class="command-tag insert">INSERT</span>
+
+            <p>Agrega registros.</p>
+
+<pre><code><span class="keyword">INSERT INTO</span> usuarios
+(nombre, edad)
+<span class="keyword">VALUES</span>
+(<span class="string">'Juan'</span>, <span class="number">21</span>);</code></pre>
+
+        </div>
+
+
+        <div class="command-card">
+
+            <span class="command-tag update">UPDATE</span>
+
+            <p>Modifica registros existentes.</p>
+
+<pre><code><span class="keyword">UPDATE</span> usuarios
+
+<span class="keyword">SET</span> edad = <span class="number">22</span>
+
+<span class="keyword">WHERE</span> id = <span class="number">1</span>;</code></pre>
+
+        </div>
+
+
+        <div class="command-card">
+
+            <span class="command-tag delete">DELETE</span>
+
+            <p>Elimina registros.</p>
+
+<pre><code><span class="keyword">DELETE FROM</span> usuarios
+
+<span class="keyword">WHERE</span> id = <span class="number">1</span>;</code></pre>
+
+        </div>
+
+
+        <div class="command-card">
+
+            <span class="command-tag select">SELECT</span>
+
+            <p>Consulta información.</p>
+
+<pre><code><span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> usuarios;</code></pre>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section>
+
+    <div class="section-label">17 — FUNCIONES</div>
+
+    <h2>Funciones de texto</h2>
+
+    <div class="function-list">
+
+        <div>
+            <code>UPPER()</code>
+            <span>Convierte texto a mayúsculas.</span>
+        </div>
+
+        <div>
+            <code>LOWER()</code>
+            <span>Convierte texto a minúsculas.</span>
+        </div>
+
+        <div>
+            <code>LENGTH()</code>
+            <span>Obtiene la longitud de un texto.</span>
+        </div>
+
+        <div>
+            <code>CONCAT()</code>
+            <span>Une diferentes textos.</span>
+        </div>
+
+        <div>
+            <code>TRIM()</code>
+            <span>Elimina espacios al inicio y final.</span>
+        </div>
+
+    </div>
+
+</section>
+
+<section>
+
+    <div class="section-label">18 — FECHAS</div>
+
+    <h2>Funciones de fecha</h2>
+
+    <div class="function-list">
+
+        <div>
+            <code>CURRENT_DATE</code>
+            <span>Obtiene la fecha actual.</span>
+        </div>
+
+        <div>
+            <code>CURRENT_TIMESTAMP</code>
+            <span>Obtiene fecha y hora actual.</span>
+        </div>
+
+        <div>
+            <code>EXTRACT()</code>
+            <span>Extrae una parte de una fecha.</span>
+        </div>
+
+    </div>
+
+</section>
+
+<section>
+
+    <div class="section-label">19 — IMPORTANTE</div>
+
+    <h2>Orden de una consulta SQL</h2>
+
+    <p class="section-description">
+        Una consulta compleja suele utilizar estas cláusulas en este orden:
+    </p>
+
+    <div class="sql-order">
+
+        <span>SELECT</span>
+        <span>FROM</span>
+        <span>JOIN</span>
+        <span>WHERE</span>
+        <span>GROUP BY</span>
+        <span>HAVING</span>
+        <span>ORDER BY</span>
+        <span>LIMIT</span>
+
+    </div>
+
+</section>
+
+<footer>
+
+    <div class="footer-logo">
+        Guía <span>de SQL</span>
+    </div>
+
+    <div class="footer-line"></div>
+
+    <small>
+        SELECT · WHERE · JOIN · GROUP BY · HAVING · ORDER BY
+    </small>
+
+</footer>
+
+
+</body>
+</html>
